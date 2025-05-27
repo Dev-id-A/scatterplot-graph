@@ -18,6 +18,7 @@
 
 //SVG creation
 const createSVG = (data) => {
+
     const svg = d3.select("body")
         .append("svg")
         .attr("width", "100%")
@@ -64,6 +65,22 @@ const timeParse = d3.timeParse("%M:%S")
             .attr("id", "y-axis")
             .attr("transform", `translate(${padding}, 0)`)
             .call(yAxis)
+
+//Circles
+        const dots = svg.selectAll("circle")
+                        .data(data)
+                        .enter()
+                        .append("circle")
+                        .attr("class", "dot")
+                        .attr("cy", d => yScale(timeParse(d.Time)))
+                        .attr("cx", d => xScale(d.Year))
+                        .attr("r", 4)
+
+//Circles styling
+                        .attr("fill", d => d.Doping ? "#CD5C5C":"#87CEFA" )
+                        .attr("stroke", d => d.Doping ? "#8B3A3A":"#607B8B")
+                        .attr("stroke-width", 1)
+                        .style("opacity", "0.8");
     }
 
     fetchData()
