@@ -117,17 +117,48 @@ const timeParse = d3.timeParse("%M:%S")
                         .attr("cx", d => xScale(d.Year))
                         .attr("r", 4)
 
-//Circles styling and data added
-                        .attr("data-xvalue", d => d.Year)
-                        .attr("data-yvalue", d => {
-                            const [min, seg] = d.Time.split(":").map(Number);
-                            return new Date(Date.UTC(1970, 0, 1, 0, min, seg))
-                        }
-                        )
+//Circles styling
                         .attr("fill", d => d.Doping ? "#CD5C5C":"#87CEFA" )
                         .attr("stroke", d => d.Doping ? "#8B3A3A":"#607B8B")
                         .attr("stroke-width", 1)
                         .style("opacity", "0.8");
+
+//Tooltip creation
+            const tooltip = d3.select("body")
+                                .append("div")
+                                .attr("id", "tooltip")
+
+//Tooltip styling
+                                .style("position", "absolute")
+                                .style("opacity", 0)
+                                .style("border", "3px solid black")
+                                .style("padding", "1%")
+                                .style("font-size", "14px")
+                                .style("border-radius", "10px");
+
+//Tooltip adittion on dots
+                        dots.attr("data-xvalue", d => d.Year)
+                        .attr("data-yvalue", d => {
+                            const [min, seg] = d.Time.split(":").map(Number);
+                            return new Date(Date.UTC(1970, 0, 1, 0, min, seg))
+                        })
+                        .on("mouseover", (e, d) => {
+                            tooltip.style("opacity", 1)
+                                    .style("display", "block")
+                                    .attr("data-year", d.Year)
+                                    .style("background-color", d.Doping ? "#E99696":"#B0E0FF")                                   
+                                    .html(`Name: ${d.Name}, Nationality: ${d.Nationality}<br>
+                                            Year: ${d.Year}, Time: ${d.Time}<br>
+                                            Doping: ${d.Doping ? d.Doping:"The rider has no doping allegation"}`);
+                        })
+                        .on("mousemove", e => {
+                            tooltip.style("left", (e.pageX + 20) + "px")
+                                    .style("top", (e.pageY - 30) + "px");
+                        })
+                        .on("mouseout", () =>{
+                            tooltip.style("opacity", 0)
+                                    .style("display", "none");
+                        })
 
     }
 
