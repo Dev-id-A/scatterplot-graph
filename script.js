@@ -35,6 +35,47 @@ const createSVG = (data) => {
             .attr("x", 300)
             .attr("font-size", 20);
 
+//Legend
+    //Background
+        svg.append("rect")
+            .attr("id", "legend-background")
+            .attr("height", 40)
+            .attr("width", 130)
+            .attr("fill", "aliceblue")
+            .attr("x", width - padding * 1.6)
+            .attr("y", padding - 15);
+
+    // Doping allegation
+        svg.append("text")
+            .attr("id", "legend")
+            .text("Doping allegations")
+            .attr("x", width - padding*1.5)
+            .attr("y", padding)
+            .attr("font-size", 10);
+        
+        svg.append("rect")
+            .attr("height", 10)
+            .attr("width", 10)
+            .attr("fill", "#CD5C5C")
+            .attr("x", width - padding + 17)
+            .attr("y", padding - 8);
+        
+    //No doping allegation
+        svg.append("text")
+            .attr("id", "legend")
+            .text("No doping allegations")
+            .attr("x", width - padding*1.5)
+            .attr("y", padding + 15)
+            .attr("font-size", 10);
+
+        svg.append("rect")
+            .attr("height", 10)
+            .attr("width", 10)
+            .attr("fill", "#87CEFA")
+            .attr("x", width - padding + 17)
+            .attr("y", padding + 6);
+
+
 //xScale
 const minYear = d3.min(data,d => d.Year);
 const maxYear = d3.max(data,d => d.Year);
@@ -76,11 +117,18 @@ const timeParse = d3.timeParse("%M:%S")
                         .attr("cx", d => xScale(d.Year))
                         .attr("r", 4)
 
-//Circles styling
+//Circles styling and data added
+                        .attr("data-xvalue", d => d.Year)
+                        .attr("data-yvalue", d => {
+                            const [min, seg] = d.Time.split(":").map(Number);
+                            return new Date(Date.UTC(1970, 0, 1, 0, min, seg))
+                        }
+                        )
                         .attr("fill", d => d.Doping ? "#CD5C5C":"#87CEFA" )
                         .attr("stroke", d => d.Doping ? "#8B3A3A":"#607B8B")
                         .attr("stroke-width", 1)
                         .style("opacity", "0.8");
+
     }
 
     fetchData()
