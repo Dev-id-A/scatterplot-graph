@@ -12,9 +12,9 @@
     
         }
         catch(e){
-            window.alert("There was an error trying to obtain data.")
+            window.alert("There was an error trying to obtain data.");
         }
-    }
+    };
 
 //SVG creation
 const createSVG = (data) => {
@@ -90,10 +90,10 @@ const maxYear = d3.max(data,d => d.Year);
         svg.append("g")
             .attr("id", "x-axis")
             .attr("transform", `translate(0, ${height - padding})`)
-            .call(xAxis)
+            .call(xAxis);
 
 //yScale
-const timeParse = d3.timeParse("%M:%S")
+const timeParse = d3.timeParse("%M:%S");
 
         const yScale = d3.scaleTime()
                             .domain(d3.extent(data, d => timeParse(d.Time)))
@@ -105,7 +105,7 @@ const timeParse = d3.timeParse("%M:%S")
         svg.append("g")
             .attr("id", "y-axis")
             .attr("transform", `translate(${padding}, 0)`)
-            .call(yAxis)
+            .call(yAxis);
 
 //Circles
         const dots = svg.selectAll("circle")
@@ -158,14 +158,9 @@ const timeParse = d3.timeParse("%M:%S")
                         .on("mouseout", () =>{
                             tooltip.style("opacity", 0)
                                     .style("display", "none");
-                        })
+                        });
 
     }
 
     fetchData()
-        .then(d=>{
-            createSVG(d)
-            console.log(d);
-            console.log(d[10].Time);
-            console.log(d[0].Doping);
-        })
+        .then(d=>createSVG(d));
